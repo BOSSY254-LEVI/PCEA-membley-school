@@ -1652,17 +1652,24 @@ button:hover {
 
 .admission-info ul {
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .admission-info li {
     padding: 0.5rem 0;
     position: relative;
     padding-left: 2rem;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    opacity: 1;
+    visibility: visible;
 }
 
 .admission-info li::before {
     content: "✓";
-    color: #10b981;
+    color: var(--success);
     font-weight: bold;
     position: absolute;
     left: 0;
