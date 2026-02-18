@@ -113,6 +113,27 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     box-shadow: 0 8px 28px rgba(2,6,23,0.06);
 }
 
+.leadership-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.leadership-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.leadership-card h4 {
+    color: var(--accent);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
 /* Typography scale refinement */
 h1 { font-size: clamp(2.25rem, 3.6vw, 3.5rem); line-height: 1.05; font-weight: 800; }
 h2 { font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height: 1.12; font-weight: 700; }
@@ -1389,16 +1410,16 @@ button, a {
     }
 }
 #leadership,
+#admissions,
 #christian-foundation {
-    padding: 30px 8%;
+    padding: 2rem 6% !important;
 }
 
 
 .section {
-    padding: 4rem 0;
-    padding: 40px 6%;
+    padding: 2.5rem 6%;
     scroll-snap-align: start;
-    min-height: 100vh;
+    min-height: auto;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -1587,8 +1608,13 @@ button:hover {
 /* Admissions Grid */
 .admissions-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.admission-info {
+    opacity: 1;
+    visibility: visible;
 }
 
 .admission-info ul {
@@ -2099,8 +2125,8 @@ button:hover {
     }
 }
 .fade-section {
-    opacity: 0;
-    transform: translateY(60px);
+    opacity: 1;
+    transform: translateY(0);
     transition: all 1s ease;
 }
 
