@@ -765,20 +765,22 @@ button, a {
     font-weight: 600;
 }
 
-/* Side Menu */
+/* Side Menu - Left Navigation Bar */
 .side-menu {
     position: fixed;
     top: 0;
     left: -100%;
     width: 85%;
-    max-width: 320px;
-    height: 100%;
-    background: #f5f5f5;
-    padding: 20px;
-    transition: 0.3s ease;
+    max-width: 280px;
+    height: 100vh;
+    background: linear-gradient(135deg, #0b1220 0%, #1a2f4f 100%);
+    padding: 20px 0;
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 999;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.2);
 }
 
 .side-menu.active {
@@ -789,39 +791,61 @@ button, a {
 .menu-header {
     display: flex;
     justify-content: flex-end;
+    padding: 0 20px 20px 20px;
 }
 
 .close-btn {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 1px solid #ccc;
-    background: white;
-    font-size: 18px;
+    border: 2px solid #4f8cff;
+    background: transparent;
+    font-size: 20px;
     cursor: pointer;
+    color: #4f8cff;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: #4f8cff;
+    color: white;
 }
 
 /* Search Bar */
 .menu-search {
     display: flex;
-    margin: 20px 0;
+    margin: 0 20px 20px 20px;
+    gap: 0;
 }
 
 .menu-search input {
     flex: 1;
-    padding: 12px;
+    padding: 12px 15px;
     border-radius: 8px 0 0 8px;
-    border: 1px solid #ccc;
+    border: 2px solid #4f8cff;
     outline: none;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 0.95rem;
+}
+
+.menu-search input::placeholder {
+    color: rgba(255,255,255,0.6);
 }
 
 .search-btn {
     padding: 12px 16px;
-    background: #0a6b2d;
+    background: #4f8cff;
     color: white;
     border: none;
     border-radius: 0 8px 8px 0;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.search-btn:hover {
+    background: #0b63d6;
 }
 
 /* Menu Links */
@@ -829,11 +853,12 @@ button, a {
     list-style: none;
     padding: 0;
     margin: 0;
+    flex: 1;
 }
 
 .menu-links li {
-    padding: 18px 0;
-    border-bottom: 1px solid #ddd;
+    padding: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -841,12 +866,48 @@ button, a {
 
 .menu-links a {
     text-decoration: none;
-    color: #1f2d3d;
-    font-size: 18px;
+    color: #e6eef8;
+    font-size: 1rem;
+    padding: 18px 20px;
+    display: block;
+    flex: 1;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+}
+
+.menu-links a:hover {
+    background: rgba(79, 140, 255, 0.15);
+    color: #4f8cff;
+    border-left-color: #4f8cff;
+}
+
+.menu-links a.active {
+    background: rgba(11, 99, 214, 0.2);
+    color: #4f8cff;
+    border-left-color: #4f8cff;
+    font-weight: 600;
+}
+
+.menu-links a.cta {
+    background: linear-gradient(135deg, #0b63d6, #4f8cff);
+    color: white;
+    margin: 20px 15px 10px 15px;
+    padding: 14px 20px;
+    border-radius: 8px;
+    border-left: none;
+    font-weight: 600;
+    text-align: center;
+}
+
+.menu-links a.cta:hover {
+    background: linear-gradient(135deg, #0952af, #3d72d9);
+    box-shadow: 0 8px 16px rgba(11, 99, 214, 0.3);
 }
 
 .dropdown-icon {
     font-size: 14px;
+    padding-right: 20px;
 }
 .mobile-header {
     position: fixed;
