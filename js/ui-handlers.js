@@ -275,25 +275,44 @@ export const initSideMenuHandlers = () => {
     const overlay = document.getElementById('overlay');
     const closeMenu = document.getElementById('closeMenu');
     const navToggle = document.getElementById('navToggle');
+    
     if (!sideMenu || !overlay || !navToggle) return;
+
+    // Toggle overlay when menu opens/closes
+    navToggle.addEventListener('click', () => {
+        setTimeout(() => {
+            if (sideMenu.classList.contains('active')) {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        }, 10);
+    });
 
     // Close handlers
     closeMenu?.addEventListener('click', () => {
         sideMenu.classList.remove('active');
         overlay.classList.remove('active');
+        navToggle.classList.remove('active');
         document.body.classList.remove('no-scroll');
     });
 
     overlay?.addEventListener('click', () => {
         sideMenu.classList.remove('active');
         overlay.classList.remove('active');
+        navToggle.classList.remove('active');
         document.body.classList.remove('no-scroll');
     });
 
-    // keep overlay state in sync when toggle is used (initNavigation already toggles active class)
-    navToggle.addEventListener('click', () => {
-        if (sideMenu.classList.contains('active')) overlay.classList.add('active');
-        else overlay.classList.remove('active');
+    // Close menu when a link is clicked
+    const menuLinks = sideMenu.querySelectorAll('a');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            sideMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            navToggle.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        });
     });
 };
 
