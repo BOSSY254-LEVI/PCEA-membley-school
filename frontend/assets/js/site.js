@@ -2,6 +2,226 @@ const header = document.getElementById("siteHeader");
 const navToggle = document.getElementById("navToggle");
 const navMenu = document.getElementById("siteNav");
 const revealItems = document.querySelectorAll(".reveal");
+const ANNOUNCEMENTS = [
+    {
+        id: "open-day-campus-tour",
+        date: "2026-03-07",
+        title: "Open Day and Campus Tour",
+        summary:
+            "Families are invited to guided classroom tours, leadership Q&A sessions, and admissions consultations.",
+        category: "events",
+        categoryLabel: "Events",
+        audience: "All Families",
+        priority: "high",
+        link: "contact.html#inquiry-form",
+        linkLabel: "Reserve Visit Slot"
+    },
+    {
+        id: "term-2-intake-interviews",
+        date: "2026-03-15",
+        title: "Term 2 Intake Interviews Begin",
+        summary:
+            "Admissions interviews and document reviews open for prospective learners joining in Term 2.",
+        category: "admissions",
+        categoryLabel: "Admissions",
+        audience: "Prospective Parents",
+        priority: "critical",
+        link: "admissions.html",
+        linkLabel: "View Admission Guide"
+    },
+    {
+        id: "parent-reporting-conference",
+        date: "2026-04-02",
+        title: "Parent Reporting Conference Week",
+        summary:
+            "Class teachers will share academic progress reports and practical home support recommendations.",
+        category: "academics",
+        categoryLabel: "Academics",
+        audience: "Current Parents",
+        priority: "normal",
+        link: "academics.html",
+        linkLabel: "See Academic Programs"
+    },
+    {
+        id: "fee-settlement-window",
+        date: "2026-04-15",
+        title: "Mid-Term Fee Settlement Window",
+        summary:
+            "Accounts office support desks will run extended sessions to assist with payment plans and confirmations.",
+        category: "operations",
+        categoryLabel: "Operations",
+        audience: "Parents and Guardians",
+        priority: "high",
+        link: "downloads/fee-schedule.pdf",
+        linkLabel: "Download Fee Guide"
+    },
+    {
+        id: "stem-arts-showcase",
+        date: "2026-05-23",
+        title: "STEM and Arts Showcase",
+        summary:
+            "Learners will present science projects, coding prototypes, visual arts, and stage performances.",
+        category: "events",
+        categoryLabel: "Events",
+        audience: "School Community",
+        priority: "normal",
+        link: "student-life.html",
+        linkLabel: "Explore Student Life"
+    }
+];
+const PRIORITY_LABELS = {
+    critical: "Urgent",
+    high: "Priority",
+    normal: "Standard"
+};
+const PRIORITY_RANK = {
+    critical: 0,
+    high: 1,
+    normal: 2
+};
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function formatAnnouncementDate(dateString) {
+    const date = new Date(`${dateString}T00:00:00`);
+    return new Intl.DateTimeFormat("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    }).format(date);
+}
+
+function sortedAnnouncements() {
+    return [...ANNOUNCEMENTS].sort((left, right) => {
+        const dateDiff = new Date(left.date) - new Date(right.date);
+        if (dateDiff !== 0) {
+            return dateDiff;
+        }
+        return PRIORITY_RANK[left.priority] - PRIORITY_RANK[right.priority];
+    });
+}
+
+function renderAnnouncementCard(item) {
+    const formattedDate = formatAnnouncementDate(item.date);
+    const priorityLabel = PRIORITY_LABELS[item.priority] || PRIORITY_LABELS.normal;
+
+    return `<article class="announcement-card reveal is-visible" data-priority="${escapeHtml(item.priority)}">
+    <div class="announcement-meta-row">
+        <span class="announcement-date"><i class="fa-regular fa-calendar"></i>${escapeHtml(formattedDate)}</span>
+        <span class="announcement-priority is-${escapeHtml(item.priority)}">${escapeHtml(priorityLabel)}</span>
+    </div>
+    <h3>${escapeHtml(item.title)}</h3>
+    <p>${escapeHtml(item.summary)}</p>
+    <div class="announcement-tags">
+        <span class="announcement-tag category">${escapeHtml(item.categoryLabel)}</span>
+        <span class="announcement-tag audience">${escapeHtml(item.audience)}</span>
+    </div>
+    <a href="${escapeHtml(item.link)}" class="announcement-cta">${escapeHtml(item.linkLabel)} <i class="fa-solid fa-arrow-right"></i></a>
+</article>`;
+}
+
+function initAnnouncementStrip() {
+    const strip = document.getElementById("announcementStrip");
+    if (!strip) {
+        return;
+    }
+
+    const [topItem] = sortedAnnouncements();
+    if (!topItem) {
+        strip.hidden = true;
+        return;
+    }
+
+    strip.innerHTML = `<div class="announcement-strip-content">
+    <div class="announcement-strip-main">
+        <span class="announcement-strip-label"><i class="fa-solid fa-bullhorn"></i>Announcement</span>
+        <p class="announcement-strip-title">${escapeHtml(topItem.title)}</p>
+        <p class="announcement-strip-meta">${escapeHtml(formatAnnouncementDate(topItem.date))} | ${escapeHtml(
+        topItem.categoryLabel
+    )} | ${escapeHtml(topItem.audience)}</p>
+    </div>
+    <div class="announcement-strip-actions">
+        <a href="${escapeHtml(topItem.link)}" class="announcement-link-btn">${escapeHtml(topItem.linkLabel)}</a>
+        <a href="announcements.html" class="announcement-link-btn">All Updates</a>
+    </div>
+</div>`;
+}
+
+function initAnnouncementPreview() {
+    const previewContainer = document.getElementById("announcementPreview");
+    if (!previewContainer) {
+        return;
+    }
+
+    previewContainer.innerHTML = sortedAnnouncements()
+        .slice(0, 3)
+        .map((item) => renderAnnouncementCard(item))
+        .join("");
+}
+
+function initAnnouncementHub() {
+    const hub = document.getElementById("announcementHub");
+    if (!hub) {
+        return;
+    }
+
+    const filterButtons = Array.from(document.querySelectorAll("[data-announcement-filter]"));
+    const searchInput = document.getElementById("announcementSearch");
+    const resultCount = document.getElementById("announcementResultCount");
+    const emptyState = document.getElementById("announcementEmpty");
+    const announcements = sortedAnnouncements();
+    let activeFilter = "all";
+    let query = "";
+
+    function applyFilters() {
+        const normalizedQuery = query.trim().toLowerCase();
+        return announcements.filter((item) => {
+            const matchesCategory = activeFilter === "all" || item.category === activeFilter;
+            const haystack = `${item.title} ${item.summary} ${item.categoryLabel} ${item.audience}`.toLowerCase();
+            const matchesQuery = !normalizedQuery || haystack.includes(normalizedQuery);
+            return matchesCategory && matchesQuery;
+        });
+    }
+
+    function render() {
+        const filtered = applyFilters();
+        hub.innerHTML = filtered.map((item) => renderAnnouncementCard(item)).join("");
+
+        if (resultCount) {
+            const label = filtered.length === 1 ? "announcement" : "announcements";
+            resultCount.textContent = `${filtered.length} ${label} found.`;
+        }
+
+        if (emptyState) {
+            emptyState.hidden = filtered.length !== 0;
+        }
+    }
+
+    filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            filterButtons.forEach((item) => item.classList.remove("is-active"));
+            button.classList.add("is-active");
+            activeFilter = button.dataset.announcementFilter || "all";
+            render();
+        });
+    });
+
+    if (searchInput) {
+        searchInput.addEventListener("input", () => {
+            query = searchInput.value;
+            render();
+        });
+    }
+
+    render();
+}
 
 function setCurrentYear() {
     const yearNodes = document.querySelectorAll(".js-year");
@@ -126,23 +346,13 @@ function initNewsFeed() {
         return;
     }
 
-    const items = [
-        {
-            date: "February 16, 2026",
-            title: "Junior Secondary Innovation Week",
-            body: "Learners showcased coding prototypes and practical science projects with strong parent participation."
-        },
-        {
-            date: "February 9, 2026",
-            title: "Parent Partnership Workshop",
-            body: "The school hosted a practical workshop on supporting literacy and numeracy at home."
-        },
-        {
-            date: "January 28, 2026",
-            title: "County Drama Festival Recognition",
-            body: "Our drama team received top honors for creativity, confidence, and stage discipline."
-        }
-    ];
+    const items = sortedAnnouncements()
+        .slice(0, 3)
+        .map((item) => ({
+            date: formatAnnouncementDate(item.date),
+            title: item.title,
+            body: item.summary
+        }));
 
     window.setTimeout(() => {
         feed.innerHTML = items
@@ -151,6 +361,7 @@ function initNewsFeed() {
     <span class="meta">${item.date}</span>
     <h3>${item.title}</h3>
     <p>${item.body}</p>
+    <a href="announcements.html" class="announcement-cta">Read Full Update <i class="fa-solid fa-arrow-right"></i></a>
 </article>`
             )
             .join("");
@@ -323,6 +534,9 @@ document.addEventListener("DOMContentLoaded", () => {
     setCurrentYear();
     highlightActivePage();
     initMobileNav();
+    initAnnouncementStrip();
+    initAnnouncementPreview();
+    initAnnouncementHub();
     initRevealAnimation();
     initPageTransition();
     initNewsFeed();

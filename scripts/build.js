@@ -19,6 +19,7 @@ const HTML_FILES = [
     "about.html",
     "academics.html",
     "admissions.html",
+    "announcements.html",
     "student-life.html",
     "contact.html"
 ];
