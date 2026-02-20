@@ -2,15 +2,17 @@
 
 /**
  * Lightweight static build script.
+ * - Reads source files from /frontend
  * - Minifies HTML, CSS, and JS into /dist
- * - Copies required static folders
+ * - Copies required static folders into /dist
  */
 
 const fs = require("fs");
 const path = require("path");
 
-const ROOT = path.resolve(__dirname, "..");
-const DIST = path.join(ROOT, "dist");
+const REPO_ROOT = path.resolve(__dirname, "..");
+const SOURCE_ROOT = path.join(REPO_ROOT, "frontend");
+const DIST = path.join(REPO_ROOT, "dist");
 
 const HTML_FILES = [
     "index.html",
@@ -28,6 +30,13 @@ const COPY_DIRS = ["PCEASCH-IMAGES", "media", "downloads"];
 
 function ensureDir(dirPath) {
     fs.mkdirSync(dirPath, { recursive: true });
+}
+
+function resetDir(dirPath) {
+    if (fs.existsSync(dirPath)) {
+        fs.rmSync(dirPath, { recursive: true, force: true });
+    }
+    ensureDir(dirPath);
 }
 
 function minifyHtml(content) {
@@ -56,7 +65,7 @@ function minifyJs(content) {
 }
 
 function readFile(relativePath) {
-    return fs.readFileSync(path.join(ROOT, relativePath), "utf8");
+    return fs.readFileSync(path.join(SOURCE_ROOT, relativePath), "utf8");
 }
 
 function writeDistFile(relativePath, content) {
@@ -66,7 +75,7 @@ function writeDistFile(relativePath, content) {
 }
 
 function copyFileIfExists(relativePath) {
-    const src = path.join(ROOT, relativePath);
+    const src = path.join(SOURCE_ROOT, relativePath);
     if (!fs.existsSync(src)) {
         return;
     }
@@ -119,7 +128,7 @@ function copyStaticAssets() {
     COPY_FILES.forEach(copyFileIfExists);
 
     COPY_DIRS.forEach((dir) => {
-        const src = path.join(ROOT, dir);
+        const src = path.join(SOURCE_ROOT, dir);
         const dest = path.join(DIST, dir);
         if (fs.existsSync(src)) {
             copyDirectoryRecursive(src, dest);
@@ -129,7 +138,11 @@ function copyStaticAssets() {
 }
 
 function run() {
-    ensureDir(DIST);
+    if (!fs.existsSync(SOURCE_ROOT)) {
+        throw new Error(`Missing source directory: ${SOURCE_ROOT}`);
+    }
+
+    resetDir(DIST);
     buildHtml();
     buildCss();
     buildJs();

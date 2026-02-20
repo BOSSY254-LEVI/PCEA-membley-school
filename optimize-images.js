@@ -3,8 +3,8 @@
 /**
  * Manifest-driven image optimization pipeline.
  *
- * Source images:        PCEASCH-IMAGES/*.jpg|jpeg|png
- * Optimized output:     PCEASCH-IMAGES/optimized/
+ * Source images:        frontend/PCEASCH-IMAGES/*.jpg|jpeg|png
+ * Optimized output:     frontend/PCEASCH-IMAGES/optimized/
  *   - webp/<name>.webp
  *   - webp/<name>-480w.webp, -768w.webp, -1200w.webp
  *   - jpg/<name>.jpg
@@ -20,8 +20,8 @@ const fs = require("fs");
 const path = require("path");
 const sharp = require("sharp");
 
-const SOURCE_DIR = path.join(__dirname, "PCEASCH-IMAGES");
-const MANIFEST_PATH = path.join(__dirname, "image-manifest.json");
+const SOURCE_DIR = path.join(__dirname, "frontend", "PCEASCH-IMAGES");
+const MANIFEST_PATH = path.join(__dirname, "frontend", "image-manifest.json");
 const OUTPUT_DIR = path.join(SOURCE_DIR, "optimized");
 const OUTPUT_WEBP_DIR = path.join(OUTPUT_DIR, "webp");
 const OUTPUT_JPG_DIR = path.join(OUTPUT_DIR, "jpg");

@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const PDFDocument = require("pdfkit");
 
-const DOWNLOADS_DIR = path.join(__dirname, "..", "downloads");
+const DOWNLOADS_DIR = path.join(__dirname, "..", "frontend", "downloads");
 
 function writePdf(fileName, title, lines) {
     const outputPath = path.join(DOWNLOADS_DIR, fileName);
@@ -63,7 +63,7 @@ async function run() {
         "For guided enrollment support, contact admissions at +254 756 428 414."
     ]);
 
-    console.log("PDF documents generated in downloads/.");
+    console.log("PDF documents generated in frontend/downloads/.");
 }
 
 run().catch((error) => {
