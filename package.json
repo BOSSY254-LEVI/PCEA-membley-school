@@ -1,5 +1,17 @@
 {
+  "name": "pcea-membley-school-website",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "optimize:images": "node optimize-images.js",
+    "optimize:images:all": "node optimize-images.js --all",
+    "optimize:images:prune": "node optimize-images.js --prune-unused",
+    "generate:pdfs": "node scripts/generate-pdfs.js",
+    "build": "node scripts/build.js",
+    "build:all": "npm run optimize:images && npm run generate:pdfs && npm run build"
+  },
   "dependencies": {
+    "pdfkit": "^0.17.2",
     "sharp": "^0.34.5"
   }
 }
